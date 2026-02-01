@@ -3,6 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { firebaseDB } from "../firebase";
 import paymentService from "../services/paymentService";
 import PaymentRequestModal from "../components/PaymentRequestModal";
+import BottomNav from "../components/BottomNav";
 import {
   QrCode,
   CreditCard,
@@ -166,39 +167,46 @@ const SecondaryDashboard = () => {
 
   return (
     <div className="min-h-screen bg-bg animate-fade-in">
-      <header className="bg-bg-card border-b border-border p-6">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <div>
-            <h1 className="text-2xl font-bold text-text mb-1">
+      {/* Mobile-First Header */}
+      <header className="bg-bg-card border-b border-border px-4 py-4 sm:px-6 sm:py-6">
+        <div className="flex justify-between items-center">
+          <div className="min-w-0 flex-1">
+            <h1 className="text-xl sm:text-2xl font-bold text-text mb-1 truncate">
               👤 Member Dashboard
             </h1>
-            <p className="text-text-muted text-sm">
+            <p className="text-sm text-text-muted truncate">
               Welcome, {user?.name || "User"}!
             </p>
           </div>
-          <div className="flex gap-2">
-            <button className="btn btn-danger" onClick={logout}>
+          <div className="flex-shrink-0">
+            <button className="btn btn-danger btn-sm" onClick={logout}>
               Logout
             </button>
           </div>
         </div>
       </header>
 
-      {/* Quick Payment Section */}
-      <div className="max-w-7xl mx-auto px-6 py-6">
+      {/* Quick Payment Section - Mobile First */}
+      <div className="px-4 py-4 pb-20 lg:pb-6 sm:px-6 sm:py-6">
         <div className="card mb-6">
-          <div className="flex justify-between items-center mb-6">
-            <h3 className="text-lg font-semibold text-text">
+          <div className="mb-6">
+            <h3 className="text-lg font-semibold text-text mb-2">
               💸 Quick Payment
             </h3>
-            <div className="text-sm text-text-muted">
-              <span className="text-success">Auto-approved</span> for payments
-              &lt; ₹1000 |<span className="text-warning"> Admin approval</span>{" "}
-              for payments ≥ ₹1000
+            <div className="text-xs sm:text-sm text-text-muted space-y-1">
+              <div>
+                <span className="text-success">Auto-approved</span> for payments
+                &lt; ₹1000
+              </div>
+              <div>
+                <span className="text-warning">Admin approval</span> for
+                payments ≥ ₹1000
+              </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Mobile-First Payment Layout */}
+          <div className="space-y-6">
             {/* Payment Form */}
             <div className="space-y-4">
               <div>
@@ -209,7 +217,7 @@ const SecondaryDashboard = () => {
                   type="number"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
-                  className="w-full px-4 py-2 bg-bg-elevated border border-border rounded-lg text-text placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  className="w-full px-4 py-3 bg-bg-elevated border border-border rounded-lg text-text placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-lg"
                   placeholder="Enter amount"
                   min="1"
                 />
@@ -222,7 +230,7 @@ const SecondaryDashboard = () => {
                   type="text"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="w-full px-4 py-2 bg-bg-elevated border border-border rounded-lg text-text placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  className="w-full px-4 py-3 bg-bg-elevated border border-border rounded-lg text-text placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                   placeholder="What's this payment for?"
                 />
               </div>
@@ -234,70 +242,61 @@ const SecondaryDashboard = () => {
                   type="text"
                   value={upiId}
                   onChange={(e) => setUpiId(e.target.value)}
-                  className="w-full px-4 py-2 bg-bg-elevated border border-border rounded-lg text-text placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  className="w-full px-4 py-3 bg-bg-elevated border border-border rounded-lg text-text placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                   placeholder={`${user?.name?.toLowerCase().replace(" ", "") || "user"}@familypay`}
                 />
               </div>
             </div>
 
-            {/* Payment Methods */}
+            {/* Payment Methods - Mobile Optimized */}
             <div className="space-y-4">
               <h4 className="font-medium text-text">Choose Payment Method</h4>
 
-              {/* QR Scanner */}
-              <button
-                onClick={() => setShowScannerModal(true)}
-                className="w-full p-4 bg-bg-elevated border border-border rounded-lg hover:border-primary transition-colors"
-              >
-                <div className="flex items-center gap-4">
-                  <div className="p-3 bg-primary/10 rounded-lg">
+              {/* Mobile-First Payment Method Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                {/* QR Scanner */}
+                <button
+                  onClick={() => setShowScannerModal(true)}
+                  className="p-4 bg-bg-elevated border border-border rounded-lg hover:border-primary transition-colors text-center"
+                >
+                  <div className="p-3 bg-primary/10 rounded-lg mx-auto mb-2 w-fit">
                     <QrCode className="w-6 h-6 text-primary" />
                   </div>
-                  <div className="text-left">
-                    <div className="font-medium text-text">Scan QR Code</div>
-                    <div className="text-sm text-text-muted">
-                      Scan merchant QR code
-                    </div>
+                  <div className="font-medium text-text text-sm">Scan QR</div>
+                  <div className="text-xs text-text-muted mt-1">
+                    Scan merchant QR
                   </div>
-                </div>
-              </button>
+                </button>
 
-              {/* UPI Payment */}
-              <button
-                onClick={() => setShowUpiModal(true)}
-                className="w-full p-4 bg-bg-elevated border border-border rounded-lg hover:border-primary transition-colors"
-              >
-                <div className="flex items-center gap-4">
-                  <div className="p-3 bg-secondary/10 rounded-lg">
+                {/* UPI Payment */}
+                <button
+                  onClick={() => setShowUpiModal(true)}
+                  className="p-4 bg-bg-elevated border border-border rounded-lg hover:border-primary transition-colors text-center"
+                >
+                  <div className="p-3 bg-secondary/10 rounded-lg mx-auto mb-2 w-fit">
                     <Smartphone className="w-6 h-6 text-secondary" />
                   </div>
-                  <div className="text-left">
-                    <div className="font-medium text-text">UPI Payment</div>
-                    <div className="text-sm text-text-muted">
-                      Pay via UPI apps
-                    </div>
+                  <div className="font-medium text-text text-sm">UPI</div>
+                  <div className="text-xs text-text-muted mt-1">
+                    Pay via UPI apps
                   </div>
-                </div>
-              </button>
+                </button>
 
-              {/* Card Payment */}
-              <button
-                onClick={() => handleQuickPayment("card")}
-                disabled={processingPayment || !amount}
-                className="w-full p-4 bg-bg-elevated border border-border rounded-lg hover:border-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <div className="flex items-center gap-4">
-                  <div className="p-3 bg-success/10 rounded-lg">
+                {/* Card Payment */}
+                <button
+                  onClick={() => handleQuickPayment("card")}
+                  disabled={processingPayment || !amount}
+                  className="p-4 bg-bg-elevated border border-border rounded-lg hover:border-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-center"
+                >
+                  <div className="p-3 bg-success/10 rounded-lg mx-auto mb-2 w-fit">
                     <CreditCard className="w-6 h-6 text-success" />
                   </div>
-                  <div className="text-left">
-                    <div className="font-medium text-text">Card Payment</div>
-                    <div className="text-sm text-text-muted">
-                      Pay with debit/credit card
-                    </div>
+                  <div className="font-medium text-text text-sm">Card</div>
+                  <div className="text-xs text-text-muted mt-1">
+                    Debit/Credit card
                   </div>
-                </div>
-              </button>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -314,19 +313,21 @@ const SecondaryDashboard = () => {
           </p>
         </div>
 
-        {/* Spending Limits */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        {/* Spending Limits - Mobile First */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
           <div className="card">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold text-text">Daily Limit</h3>
-              <span className="text-2xl font-bold text-primary">
-                ₹{dailyRemaining.toLocaleString()}
-              </span>
+            <div className="flex justify-between items-start mb-4">
+              <div>
+                <h3 className="text-lg font-semibold text-text">Daily Limit</h3>
+                <span className="text-2xl font-bold text-primary block mt-1">
+                  ₹{dailyRemaining.toLocaleString()}
+                </span>
+              </div>
             </div>
-            <div className="space-y-2">
+            <div className="space-y-3">
               <div className="flex justify-between text-sm">
                 <span className="text-text-muted">Spent</span>
-                <span className="text-text">
+                <span className="text-text font-medium">
                   ₹{circle?.currentDailySpent?.toLocaleString() || 0} / ₹
                   {circle?.dailyLimit?.toLocaleString() || 0}
                 </span>
@@ -344,16 +345,20 @@ const SecondaryDashboard = () => {
           </div>
 
           <div className="card">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold text-text">Monthly Limit</h3>
-              <span className="text-2xl font-bold text-primary">
-                ₹{monthlyRemaining.toLocaleString()}
-              </span>
+            <div className="flex justify-between items-start mb-4">
+              <div>
+                <h3 className="text-lg font-semibold text-text">
+                  Monthly Limit
+                </h3>
+                <span className="text-2xl font-bold text-primary block mt-1">
+                  ₹{monthlyRemaining.toLocaleString()}
+                </span>
+              </div>
             </div>
-            <div className="space-y-2">
+            <div className="space-y-3">
               <div className="flex justify-between text-sm">
                 <span className="text-text-muted">Spent</span>
-                <span className="text-text">
+                <span className="text-text font-medium">
                   ₹{circle?.currentMonthlySpent?.toLocaleString() || 0} / ₹
                   {circle?.monthlyLimit?.toLocaleString() || 0}
                 </span>
@@ -371,28 +376,28 @@ const SecondaryDashboard = () => {
           </div>
         </div>
 
-        {/* Transaction History */}
+        {/* Transaction History - Mobile First */}
         <div className="card">
-          <div className="flex justify-between items-center mb-6">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-4">
             <h3 className="text-lg font-semibold text-text">
               Recent Transactions
             </h3>
             <button
-              className="btn btn-secondary btn-sm"
+              className="btn btn-secondary btn-sm w-full sm:w-auto"
               onClick={() => setShowPaymentModal(true)}
             >
               View All
             </button>
           </div>
-          <div className="space-y-4">
+          <div className="space-y-3">
             {transactions.slice(0, 5).map((transaction) => (
               <div
                 key={transaction.id}
-                className="flex items-center justify-between p-4 bg-bg-elevated rounded-lg border border-border"
+                className="flex items-center justify-between p-3 sm:p-4 bg-bg-elevated rounded-lg border border-border"
               >
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 min-w-0 flex-1">
                   <div
-                    className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                    className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
                       transaction.status === "completed"
                         ? "bg-success/10"
                         : transaction.status === "pending"
@@ -401,28 +406,28 @@ const SecondaryDashboard = () => {
                     }`}
                   >
                     {transaction.status === "completed" ? (
-                      <CheckCircle className="w-5 h-5 text-success" />
+                      <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-success" />
                     ) : transaction.status === "pending" ? (
-                      <Clock className="w-5 h-5 text-warning" />
+                      <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-warning" />
                     ) : (
-                      <X className="w-5 h-5 text-danger" />
+                      <X className="w-4 h-4 sm:w-5 sm:h-5 text-danger" />
                     )}
                   </div>
-                  <div>
-                    <div className="font-medium text-text">
+                  <div className="min-w-0 flex-1">
+                    <div className="font-medium text-text truncate">
                       {transaction.description}
                     </div>
-                    <div className="text-sm text-text-muted">
+                    <div className="text-xs sm:text-sm text-text-muted">
                       {new Date(transaction.createdAt).toLocaleDateString()}
                     </div>
                   </div>
                 </div>
-                <div className="text-right">
-                  <div className="font-semibold text-text">
+                <div className="text-right flex-shrink-0 ml-2">
+                  <div className="font-semibold text-text text-sm sm:text-base">
                     ₹{transaction.amount}
                   </div>
                   <div
-                    className={`text-xs px-2 py-1 rounded-full ${
+                    className={`text-xs px-2 py-1 rounded-full inline-block mt-1 ${
                       transaction.status === "completed"
                         ? "bg-success/10 text-success"
                         : transaction.status === "pending"
@@ -433,7 +438,7 @@ const SecondaryDashboard = () => {
                     {transaction.status === "completed"
                       ? "Completed"
                       : transaction.status === "pending"
-                        ? "Pending Approval"
+                        ? "Pending"
                         : "Failed"}
                   </div>
                 </div>
@@ -443,10 +448,10 @@ const SecondaryDashboard = () => {
         </div>
       </div>
 
-      {/* QR Scanner Modal */}
+      {/* QR Scanner Modal - Mobile First */}
       {showScannerModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-bg-card rounded-lg p-6 max-w-md w-full mx-4">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-bg-card rounded-lg p-4 sm:p-6 max-w-md w-full">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold text-text">Scan QR Code</h3>
               <button onClick={() => setShowScannerModal(false)}>
@@ -454,8 +459,8 @@ const SecondaryDashboard = () => {
               </button>
             </div>
             <div className="text-center mb-4">
-              <div className="w-48 h-48 mx-auto bg-bg-elevated rounded-lg flex items-center justify-center mb-4">
-                <QrCode className="w-24 h-24 text-text-muted" />
+              <div className="w-40 h-40 sm:w-48 sm:h-48 mx-auto bg-bg-elevated rounded-lg flex items-center justify-center mb-4">
+                <QrCode className="w-16 h-16 sm:w-24 sm:h-24 text-text-muted" />
               </div>
               <p className="text-sm text-text-muted">
                 Scan merchant QR code to auto-fill payment details
@@ -472,10 +477,10 @@ const SecondaryDashboard = () => {
         </div>
       )}
 
-      {/* UPI Modal */}
+      {/* UPI Modal - Mobile First */}
       {showUpiModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-bg-card rounded-lg p-6 max-w-md w-full mx-4">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-bg-card rounded-lg p-4 sm:p-6 max-w-md w-full">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold text-text">UPI Payment</h3>
               <button onClick={() => setShowUpiModal(false)}>
@@ -484,14 +489,14 @@ const SecondaryDashboard = () => {
             </div>
             <div className="space-y-4">
               <div className="text-center">
-                <div className="w-32 h-32 mx-auto bg-primary rounded-lg flex items-center justify-center mb-4">
-                  <Smartphone className="w-16 h-16 text-white" />
+                <div className="w-28 h-28 sm:w-32 sm:h-32 mx-auto bg-primary rounded-lg flex items-center justify-center mb-4">
+                  <Smartphone className="w-12 h-12 sm:w-16 sm:h-16 text-white" />
                 </div>
                 <p className="text-sm text-text-muted">Pay using any UPI app</p>
               </div>
               <div className="p-3 bg-bg-elevated rounded-lg">
                 <p className="text-xs text-text-muted mb-1">UPI ID</p>
-                <p className="font-mono text-text">
+                <p className="font-mono text-text break-all">
                   {upiId ||
                     `${user?.name?.toLowerCase().replace(" ", "") || "user"}@familypay`}
                 </p>
@@ -515,6 +520,9 @@ const SecondaryDashboard = () => {
           onAdd={handlePaymentRequest}
         />
       )}
+
+      {/* Mobile Bottom Navigation */}
+      <BottomNav userRole={user?.role} />
     </div>
   );
 };

@@ -11,6 +11,10 @@ import Register from "./pages/Register";
 import PrimaryDashboard from "./pages/PrimaryDashboard";
 import SecondaryDashboard from "./pages/SecondaryDashboard";
 import RealtimeDashboard from "./pages/RealtimeDashboard";
+import ProfilePage from "./pages/ProfilePage";
+import PayPage from "./pages/PayPage";
+import NotificationsPage from "./pages/NotificationsPage";
+import TestPage from "./pages/TestPage";
 import "./index.css";
 
 // Protected Route component
@@ -107,6 +111,38 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <RealtimeDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/dashboard/profile"
+        element={
+          <ProtectedRoute>
+            <ProfilePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/dashboard/test"
+        element={
+          <ProtectedRoute>
+            <TestPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/dashboard/payments"
+        element={
+          <ProtectedRoute>
+            <PayPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/dashboard/notifications"
+        element={
+          <ProtectedRoute>
+            <NotificationsPage />
           </ProtectedRoute>
         }
       />

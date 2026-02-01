@@ -4,6 +4,7 @@ import { mockAPI, mockCircle } from "../services/mockData";
 import AddMemberModal from "../components/AddMemberModal";
 import SetLimitModal from "../components/SetLimitModal";
 import AdminSidebar from "../components/AdminSidebar";
+import BottomNav from "../components/BottomNav";
 import { Menu, Sun, Moon, Bell, Search, User, ChevronDown } from "lucide-react";
 
 const PrimaryDashboard = () => {
@@ -318,7 +319,7 @@ const PrimaryDashboard = () => {
         </header>
 
         {/* Main Content */}
-        <div className="p-6">
+        <div className="p-6 pb-20 lg:pb-6">
           {/* Family Pay Statistics Overview Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
             {/* Total Spending Card */}
@@ -1322,6 +1323,9 @@ const PrimaryDashboard = () => {
           )}
         </div>
       </div>
+
+      {/* Mobile Bottom Navigation */}
+      <BottomNav userRole={user?.role} />
     </div>
   );
 };

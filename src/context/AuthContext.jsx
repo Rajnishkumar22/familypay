@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { firebaseAuth, firebaseDB, userService } from "../firebase";
+import { mockAuthService } from "../services/mockAuthService";
 
 const AuthContext = createContext();
 
@@ -60,17 +61,54 @@ export const AuthProvider = ({ children }) => {
     try {
       setError(null);
       setLoading(true);
-      const result = await firebaseAuth.signIn(
-        credentials.email,
-        credentials.password,
-      );
 
-      if (result.success) {
-        // User data will be set by the onAuthStateChanged listener
-        return { success: true, data: result.user };
+      // Check if credentials match mock admin user
+      if (
+        credentials.email === "rajnish@familypay.com" &&
+        credentials.password === "admin123"
+      ) {
+        // Use mock authentication for admin
+        const result = await mockAuthService.signIn(
+          credentials.email,
+          credentials.password,
+        );
+
+        if (result.success) {
+          // Get mock user data
+          const userDataResult = await mockAuthService.getUserData(
+            result.user.uid,
+          );
+
+          if (userDataResult.success) {
+            setUser({
+              id: result.user.uid,
+              email: result.user.email,
+              photoURL: result.user.photoURL,
+              ...userDataResult.data,
+            });
+            return { success: true, data: result.user };
+          } else {
+            setError(userDataResult.error);
+            return { success: false, error: userDataResult.error };
+          }
+        } else {
+          setError(result.error);
+          return { success: false, error: result.error };
+        }
       } else {
-        setError(result.error);
-        return { success: false, error: result.error };
+        // Use Firebase authentication for other users
+        const result = await firebaseAuth.signIn(
+          credentials.email,
+          credentials.password,
+        );
+
+        if (result.success) {
+          // User data will be set by the onAuthStateChanged listener
+          return { success: true, data: result.user };
+        } else {
+          setError(result.error);
+          return { success: false, error: result.error };
+        }
       }
     } catch (error) {
       const errorMessage = error.message;

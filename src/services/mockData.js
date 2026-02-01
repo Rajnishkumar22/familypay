@@ -6,7 +6,7 @@ export const mockUsers = {
     email: "rajnish@familypay.com",
     password: "admin123",
     phone: "9876543210",
-    role: "PRIMARY",
+    role: "ADMIN", // Changed from PRIMARY to ADMIN for admin dashboard access
     isMinor: false,
     upiId: "rajnish@paytm",
   },
